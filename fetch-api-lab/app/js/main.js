@@ -28,7 +28,9 @@ function logError(error) {
 // Fetch JSON ----------
 
 function fetchJSON() {
-  // TODO
+	fetch('examples/animals.json')
+		.then(logResult)
+		.catch(logError);
 }
 const jsonButton = document.getElementById('json-btn');
 jsonButton.addEventListener('click', fetchJSON);
