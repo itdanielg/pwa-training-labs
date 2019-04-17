@@ -24,11 +24,34 @@ function logError(error) {
   console.log('Looks like there was a problem:', error);
 }
 
+function validateResponse(response) {
+	if (!response.ok) {
+		throw Error(response.statusText);
+	}
+	return response;
+}
 
+function readResponseAsJSON(response) {
+	return response.json();
+}
+
+function showImage(responseAsBlob) {
+	const container = document.getElementById('img-container');
+	const imgElem = document.createElement('img');
+	container.appendChild(imgElem);
+	const imgUrl = URL.createObjectURL(responseAsBlob);
+	imgElem.src = imgUrl;
+}
+
+function readResponseAsBlob(response) {
+	return response.blob()
+}
 // Fetch JSON ----------
 
 function fetchJSON() {
 	fetch('examples/animals.json')
+		.then(validateResponse)
+		.then(readResponseAsJSON)
 		.then(logResult)
 		.catch(logError);
 }
@@ -39,8 +62,13 @@ jsonButton.addEventListener('click', fetchJSON);
 // Fetch Image ----------
 
 function fetchImage() {
-  // TODO
+  	fetch('examples/fetching.jpg')
+		.then(validateResponse)
+		.then(readResponseAsBlob)
+		.then(showImage)
+		.catch(logError);
 }
+
 const imgButton = document.getElementById('img-btn');
 imgButton.addEventListener('click', fetchImage);
 
